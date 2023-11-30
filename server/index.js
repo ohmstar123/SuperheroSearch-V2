@@ -448,8 +448,7 @@ infoRouter.route('/publishers')
             // Filter out the array for any duplicates
             const uniquePublishers = [...new Set(allPublishers)]
             const filteredPublishers = uniquePublishers.filter((item) => item !== '')
-            res.json({ message: "GOD DID" });
-            //res.send(filteredPublishers)
+            res.send(filteredPublishers)
         }
         catch (error){
             console.error(error);
