@@ -13,6 +13,8 @@ const SearchHeroes = () => {
         const results = [
           { name: 'Hulk', publisher: 'Marvel', race: 'Human', power: 'Super Strength' },
           { name: 'Superman', publisher: 'DC Comics', race: 'Alien', power: 'Super Speed' },
+          { name: 'Spiderman', publisher: 'Marvel', race: 'Human', power: 'Super Strength' }, 
+          { name: 'Thor', publisher: 'Marvel', race: 'God', power: 'Super Strength' }
           // Add more results as needed
         ];
     
@@ -26,7 +28,7 @@ const SearchHeroes = () => {
           return nameMatch && publisherMatch && raceMatch && powerMatch;
         });
     
-        setSearchResults(filteredResults);
+        setSearchResults(filteredResults); 
     };
 
     return (

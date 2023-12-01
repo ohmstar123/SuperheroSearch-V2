@@ -1,6 +1,7 @@
 import React from 'react';
 import "./HomePage.css";
-import SearchHeroes from './SearchHeroes';
+import SearchHeroes from '../SearchHeroes/SearchHeroes';
+import Login from '../Login/Login';
 
 const HomePage = () => {
     return(
