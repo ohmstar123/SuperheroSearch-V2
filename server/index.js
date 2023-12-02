@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 3001;
 // Connect to your MongoDB database located at 'mongodb://localhost:27017/superheroDB'
 mongoose.connect('mongodb://localhost:27017/superheroDB')
 
+
 // Get a reference to the database connection
 const db = mongoose.connection
 
@@ -486,6 +487,66 @@ infoRouter.route('/:tableName/getAll')
     
         
     })
+
+infoRouter.route('/getInfoAndPowers')
+// Get all the information and powers for all the superheroes
+.get(async (req, res) => {
+    try{
+        const allSuperheroes = await superheroInfo.find({}).select('-_id -__v')
+        const everything = []
+        for (const superhero of allSuperheroes){
+            const superheroPower = await superheroPowerInfo.findOne({hero_names: superhero.name}).select('-_id -__v')
+            
+            //const powers = []
+        
+            stats = {
+                id: superhero.id,
+                name: superhero.name,
+                Gender: superhero.Gender,
+                'Eye color': superhero['Eye color'],
+                Race: superhero.Race,
+                'Hair color': superhero['Hair color'],
+                Height: superhero.Height,
+                Publisher: superhero.Publisher,
+                'Skin color': superhero['Skin color'],
+                Alignment: superhero.Alignment,
+                Weight: superhero.Weight,
+                Powers: []
+            }
+
+            if (superheroPower){
+                for (p in superheroPower){
+                    if (superheroPower[p] === 'True'){
+                        stats.Powers.push(p)
+                    }
+                }
+                everything.push(stats)
+            }
+            else{
+                stats.Powers.push('None')
+                everything.push(stats)
+            }
+
+            // if (superheroPower){
+            //     for (p in superheroPower){
+            //         if (superheroPower[p] === 'True'){
+            //             stats[p] = true
+            //         }
+            //     }
+            //     everything.push(stats)
+            // }
+            // else{
+            //     everything.push(stats)
+            // }
+        }
+        
+        res.send(everything)
+    }
+    catch (error){
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+})
 
 infoRouter.route('/') // Chain all the routes to the base prefix (/api/superheroes)
     // Get info on all the superheroes
@@ -1071,6 +1132,8 @@ infoRouter.route('/id/:id/powers')
             res.status(500).send('Internal Server Error');
         }
     })
+
+
 
 // Determine the base prefix for the router
 app.use('/api/superheroes', infoRouter)
