@@ -46,17 +46,6 @@ const SearchHeroes = () => {
     
         // Filtering based on search criteria
         const filteredResults = results.filter(hero => {
-          // const nameMatch = hero.name.toLowerCase().startsWith(name.toLowerCase());
-          // const publisherMatch = hero.Publisher.toLowerCase().startsWith(publisher.toLowerCase());
-          // const raceMatch = hero.Race.toLowerCase().startsWith(race.toLowerCase()); 
-          // let powerMatch = false;
-          // for (let i = 0; i < hero.Powers.length; i++) {
-          //   if (hero.Powers[i].toLowerCase().startsWith(power.toLowerCase())) {
-          //     powerMatch = true;
-          //     break
-          //   }
-          // }
-
           const nameMatch = fuzzySearch(name, hero.name)
           const publisherMatch = fuzzySearch(publisher, hero.Publisher)
           const raceMatch = fuzzySearch(race, hero.Race)
