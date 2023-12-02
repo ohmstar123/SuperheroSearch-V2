@@ -8,12 +8,20 @@ const SignIn = () => {
     
     const signIn = (e) => {
         e.preventDefault()
+
+        if (!email || !password) {
+            alert('Please enter an email and password')
+            return
+        }
+
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             console.log(userCredential)
         })
         .catch((error) => {
             console.log(error)
+            
+            alert('Incorrect email or password')
         })
 
 

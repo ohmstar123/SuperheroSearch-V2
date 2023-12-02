@@ -13,6 +13,7 @@ const SignUp = () => {
             console.log(userCredential)
         })
         .catch((error) => {
+            alert('Email already exists')
             console.log(error)
         })
 
@@ -25,6 +26,7 @@ const SignUp = () => {
                 <h1>Create An Account</h1>
                 <input type='email' placeholder='Enter your email' value={email} onChange={(e) => setEmail(e.target.value)}></input>
                 <input type='password' placeholder='Enter your password' value={password} onChange={(e) => setPassword(e.target.value)}></input>
+                <input type='text' placeholder='Enter your username'></input>
                 <button type='submit'>Sign Up</button>
             </form>
         </div>
