@@ -51,6 +51,12 @@ const SearchHeroes = () => {
         setSearchResults(filteredResults); 
     };
 
+    const handleDDGSearch = (name, publisher) => {
+      const searchQuery = `${name} ${publisher}`;
+      const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(searchQuery)}`
+      window.open(searchUrl, '_blank')
+    }
+
     return (
         <div>
           <h2>Search Heroes</h2>
@@ -105,7 +111,9 @@ const SearchHeroes = () => {
                             {power}
                           </li>
                         ))}
-                        
+                        <button onClick={() => handleDDGSearch(hero.name, hero.Publisher)}>
+                          Search for {hero.name} on DuckDuckGo
+                        </button>
                       </div>
                     )}
                   </li>

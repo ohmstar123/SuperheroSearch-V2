@@ -37,3 +37,18 @@ ul {
     border-radius: 4px;
     background-color: #f9f9f9;
 }
+
+.expandedInfo button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.expandedInfo button:hover {
+    background-color: #2980b9;
+}
