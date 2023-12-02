@@ -1,9 +1,10 @@
-import React from 'react';
-import "./HomePage.css";
-import SearchHeroes from '../SearchHeroes/SearchHeroes';
-import Login from '../Login/Login';
+import React from 'react'
+import "./HomePage.css"
+import SearchHeroes from '../SearchHeroes/SearchHeroes'
+import Login from '../Login/Login'
 import SignIn from '../Auth/SignIn'
 import SignUp from '../Auth/SignUp'
+import AuthDetails from '../AuthDetails'
 
 const HomePage = () => {
     return(
@@ -13,6 +14,7 @@ const HomePage = () => {
             {/* <Login /> */}
             <SignIn />
             <SignUp />
+            <AuthDetails />
             <SearchHeroes />
         </div>
     )
