@@ -20,6 +20,25 @@ const SearchHeroes = () => {
         });
     }, []);
     
+    const fuzzySearch = (query, target) => {
+      const queryNoSpaces = query.replace(/\s/g, '')
+      const targetNoSpaces = target.replace(/\s/g, '')
+
+      const queryLower = queryNoSpaces.toLowerCase()
+      const targetLower = targetNoSpaces.toLowerCase()
+
+      let mismatchCount = 0;
+      for (let i = 0; i < queryLower.length; i++) {
+        if (queryLower[i] !== targetLower[i]) {
+          mismatchCount++
+
+          if (mismatchCount > 2) {
+            return false;
+          }
+        } 
+      }
+      return true
+    }
 
     const handleSearch = (resultIndex) => {
         // Gather all the data from the database
@@ -27,16 +46,21 @@ const SearchHeroes = () => {
     
         // Filtering based on search criteria
         const filteredResults = results.filter(hero => {
-          const nameMatch = hero.name.toLowerCase().startsWith(name.toLowerCase());
-          const publisherMatch = hero.Publisher.toLowerCase().startsWith(publisher.toLowerCase());
-          const raceMatch = hero.Race.toLowerCase().startsWith(race.toLowerCase()); 
-          let powerMatch = false;
-          for (let i = 0; i < hero.Powers.length; i++) {
-            if (hero.Powers[i].toLowerCase().startsWith(power.toLowerCase())) {
-              powerMatch = true;
-              break
-            }
-          }
+          // const nameMatch = hero.name.toLowerCase().startsWith(name.toLowerCase());
+          // const publisherMatch = hero.Publisher.toLowerCase().startsWith(publisher.toLowerCase());
+          // const raceMatch = hero.Race.toLowerCase().startsWith(race.toLowerCase()); 
+          // let powerMatch = false;
+          // for (let i = 0; i < hero.Powers.length; i++) {
+          //   if (hero.Powers[i].toLowerCase().startsWith(power.toLowerCase())) {
+          //     powerMatch = true;
+          //     break
+          //   }
+          // }
+
+          const nameMatch = fuzzySearch(name, hero.name)
+          const publisherMatch = fuzzySearch(publisher, hero.Publisher)
+          const raceMatch = fuzzySearch(race, hero.Race)
+          const powerMatch = hero.Powers.some((heroPower) => fuzzySearch(power, heroPower))
     
           return nameMatch && publisherMatch && raceMatch && powerMatch;
         });
