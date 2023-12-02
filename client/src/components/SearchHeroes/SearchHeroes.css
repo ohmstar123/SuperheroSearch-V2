@@ -1,25 +1,39 @@
 ul {
     list-style: none;
     padding: 0;
-  }
-  
-  li {
+}
+
+.newHero-item{
     margin-bottom: 12px;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  li:hover {
+    cursor: pointer;
+}
+
+.newHero-item:hover {
     background-color: #f0f0f0;
-  }
-  
-  .heroName {
+}
+
+.power-list-item{
+    margin: 0;
+    padding: 0;
+}
+
+.heroName {
     font-weight: bold;
-  }
-  
-  .publisher {
+}
+
+.publisher {
     color: #555;
-  }
+}
+
+.expandedInfo {
+    margin-top: 8px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}

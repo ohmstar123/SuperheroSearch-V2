@@ -2,47 +2,28 @@ import React, { useState } from 'react';
 import "./SearchHeroes.css";
 
 const SearchHeroes = () => {
+  // useStates for the search criteria
     const [name, setName] = useState('');
     const [publisher, setPublisher] = useState('');
     const [race, setRace] = useState('');
     const [power, setPower] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    ///////////////////////////////////////////////////////////////
     const [fetchedData, setFetchedData] = useState(null);
+    const [expandedResult, setExpandedResult] = useState(null);
 
+    // Fetching data from the database for all superhero info and powers 
     React.useEffect(() => {
       fetch("/api/superheroes/getInfoAndPowers")
         .then((res) => res.json())
         .then((data) => {
-          // console.log(data);
-          setFetchedData(data)
-
-          // setTimeout(() => {
-          //   console.log(fetchedData);
-          // }, 2000); 
-          
+          setFetchedData(data)     
         });
     }, []);
-    ///////////////////////////////////////////////////////////////
+    
 
-    const handleSearch = () => {
-        // Simulating search logic - replace with actual search functionality
-        // const results = [
-        //   { name: 'Hulk', publisher: 'Marvel', race: 'Human', power: 'Super Strength' },
-        //   { name: 'Superman', publisher: 'DC Comics', race: 'Alien', power: 'Super Speed' },
-        //   { name: 'Spiderman', publisher: 'Marvel', race: 'Human', power: 'Super Strength' }, 
-        //   { name: 'Thor', publisher: 'Marvel', race: 'God', power: 'Super Strength' }
-        //   // Add more results as needed
-        // ];
+    const handleSearch = (resultIndex) => {
+        // Gather all the data from the database
         const results = fetchedData;
-
-        // fetch("/api/superheroes/getInfoAndPowers")
-        // .then((res) => res.json())
-        // .then((data) => {
-        //   console.log(data);
-        //   //setData(data.message)
-        // });
-        //console.log(fetchedData)
     
         // Filtering based on search criteria
         const filteredResults = results.filter(hero => {
@@ -59,7 +40,14 @@ const SearchHeroes = () => {
     
           return nameMatch && publisherMatch && raceMatch && powerMatch;
         });
-    
+
+        // If the clicked result is already expanded, collapse it
+        if (resultIndex === expandedResult) {
+          setExpandedResult(null);
+        } else {
+          // Otherwise, expand the clicked result
+          setExpandedResult(resultIndex);
+        }
         setSearchResults(filteredResults); 
     };
 
@@ -97,8 +85,29 @@ const SearchHeroes = () => {
             {searchResults.length > 0 ? (
               <ul>
                 {searchResults.map((hero, index) => (
-                  <li key={index}>
-                    Name: {hero.name}, Publisher: {hero.Publisher}
+                  <li key={index} className='newHero-item' onClick={() => handleSearch(index)}>
+                    <div className = 'resultHeader'>
+                      <b>Name:</b> {hero.name} <br></br>
+                      <b>Publisher:</b> {hero.Publisher}
+                    </div>
+                    {expandedResult === index && (
+                      <div className = 'expandedInfo'>
+                        <b>Gender:</b> {hero.Gender} <br></br>
+                        <b>Eye Color:</b> {hero['Eye color']} <br></br>
+                        <b>Race:</b> {hero.Race} <br></br>
+                        <b>Hair Color:</b> {hero['Hair color']} <br></br>
+                        <b>Height:</b> {hero.Height} <br></br>
+                        <b>Skin color:</b> {hero['Skin color']} <br></br>
+                        <b>Alignment:</b> {hero.Alignment} <br></br>
+                        <b>Weight:</b> {hero.Weight} <br></br>
+                        <b>Powers:</b> {hero.Powers.map((power, index) => (
+                          <li key={index} className='power-list-item'>
+                            {power}
+                          </li>
+                        ))}
+                        
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>

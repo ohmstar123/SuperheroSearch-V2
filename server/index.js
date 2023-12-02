@@ -495,7 +495,7 @@ infoRouter.route('/getInfoAndPowers')
         const allSuperheroes = await superheroInfo.find({}).select('-_id -__v')
         const everything = []
         for (const superhero of allSuperheroes){
-            const superheroPower = await superheroPowerInfo.findOne({hero_names: superhero.name}).select('-_id -__v')
+            const superheroPower = await superheroPowerInfo.findOne({hero_names: superhero.name}).select('-_id -__v').lean()
             
             //const powers = []
         
@@ -526,18 +526,6 @@ infoRouter.route('/getInfoAndPowers')
                 stats.Powers.push('None')
                 everything.push(stats)
             }
-
-            // if (superheroPower){
-            //     for (p in superheroPower){
-            //         if (superheroPower[p] === 'True'){
-            //             stats[p] = true
-            //         }
-            //     }
-            //     everything.push(stats)
-            // }
-            // else{
-            //     everything.push(stats)
-            // }
         }
         
         res.send(everything)
