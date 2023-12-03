@@ -18,10 +18,21 @@ const SignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
             console.log(userCredential)
-            const token = await getIdToken(userCredential.user);
-                // Assuming your JWT token is stored in userCredential object
-                setJwtToken(token);
-                console.log(token)
+            const token = await getIdToken(userCredential.user)
+            // Assuming your JWT token is stored in userCredential object
+            setJwtToken(token)
+            console.log(token)
+            console.log(userCredential.user.displayName)
+            console.log(userCredential.user.email)
+            console.log(userCredential.user.emailVerified)
+            
+            await fetch(`/api/superheroes/updateUser/${token}/${userCredential.user.displayName}/${userCredential.user.email}/${userCredential.user.emailVerified}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
         })
         .catch((error) => {
             console.log(error)

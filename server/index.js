@@ -396,6 +396,15 @@ const newHeroData = new mongoose.Schema({
     "Omniscient": String,
 })
 
+const userInfoSchema = new mongoose.Schema({
+    "JWT": String, 
+    "Username": String,
+    "Email": String,
+    "Status": String
+})
+const userInfo = mongoose.model('userInfo', userInfoSchema)
+module.exports = userInfo
+
 // Read superhero_info json file
 //const superheroData = JSON.parse(fs.readFileSync("../jsonFiles/superhero_info.json", 'utf-8'))
 //const superheroPowers = JSON.parse(fs.readFileSync("../jsonFiles/superhero_powers.json", 'utf-8'))
@@ -531,6 +540,29 @@ infoRouter.route('/getInfoAndPowers')
         res.send(everything)
     }
     catch (error){
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+})
+
+infoRouter.route('/updateUser/:JWT/:username/:email/:status')
+
+.put (async (req, res) => {
+    const JWT = req.params.JWT;
+    const username = req.params.username;
+    const email = req.params.email;
+    const status = req.params.status;
+
+    try {
+        await userInfo.findOneAndUpdate(
+        { Email: email },
+        { JWT, Username: username, Status: status },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+        );
+    
+        res.send('User info updated');
+    } 
+    catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
