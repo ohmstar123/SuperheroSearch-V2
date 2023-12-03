@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { auth } from '../../firebase'
-import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile} from 'firebase/auth'
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth'
 
 const SignUp = () => {
     const [email, setEmail] = useState('')
@@ -8,25 +8,6 @@ const SignUp = () => {
     const [username, setUsername] = useState('')
     
     const signUp = async (e) => {
-        // e.preventDefault()
-        // createUserWithEmailAndPassword(auth, email, password)
-        // .then((userCredential) => {
-        //     console.log(username)
-        //     updateProfile(userCredential.user, { displayName: username})
-        //     sendEmailVerification(auth.currentUser)
-        //     .then(() => {
-        //         console.log('Verification email sent')
-        //     })
-        //     .catch((error) => {
-        //         console.error(error)
-        //     })
-        //     console.log(userCredential)
-        // })
-        // .catch((error) => {
-        //     alert('Email already exists')
-        //     console.log(error)
-        // })
-
         try{
             e.preventDefault()
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)

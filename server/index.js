@@ -546,27 +546,26 @@ infoRouter.route('/getInfoAndPowers')
 })
 
 infoRouter.route('/updateUser/:JWT/:username/:email/:status')
+    .put (async (req, res) => {
+        const JWT = req.params.JWT;
+        const username = req.params.username;
+        const email = req.params.email;
+        const status = req.params.status;
 
-.put (async (req, res) => {
-    const JWT = req.params.JWT;
-    const username = req.params.username;
-    const email = req.params.email;
-    const status = req.params.status;
-
-    try {
-        await userInfo.findOneAndUpdate(
-        { Email: email },
-        { JWT, Username: username, Status: status },
-        { upsert: true, new: true, setDefaultsOnInsert: true }
-        );
-    
-        res.send('User info updated');
-    } 
-    catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
-})
+        try {
+            await userInfo.findOneAndUpdate(
+            { Email: email },
+            { JWT, Username: username, Status: status },
+            { upsert: true, new: true, setDefaultsOnInsert: true }
+            );
+        
+            res.send('User info updated');
+        } 
+        catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    })
 
 infoRouter.route('/') // Chain all the routes to the base prefix (/api/superheroes)
     // Get info on all the superheroes
