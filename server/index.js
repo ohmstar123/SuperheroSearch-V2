@@ -400,7 +400,10 @@ const userInfoSchema = new mongoose.Schema({
     "JWT": String, 
     "Username": String,
     "Email": String,
-    "Status": String
+    "Status": Boolean,
+    "Admin": Boolean,
+    "SuperAdmin": Boolean,
+    "Disabled": Boolean
 })
 const userInfo = mongoose.model('userInfo', userInfoSchema)
 module.exports = userInfo
@@ -545,17 +548,20 @@ infoRouter.route('/getInfoAndPowers')
     }
 })
 
-infoRouter.route('/updateUser/:JWT/:username/:email/:status')
+infoRouter.route('/updateUser/:JWT/:username/:email/:status/:admin/:superAdmin/:disabled')
     .put (async (req, res) => {
         const JWT = req.params.JWT;
         const username = req.params.username;
         const email = req.params.email;
-        const status = req.params.status;
+        const status = req.params.status === 'true';
+        const admin = req.params.admin === 'true';
+        const superAdmin = req.params.superAdmin === 'true';
+        const disabled = req.params.disabled === 'true';
 
         try {
             await userInfo.findOneAndUpdate(
             { Email: email },
-            { JWT, Username: username, Status: status },
+            { JWT, Username: username, Status: status, Admin: admin, SuperAdmin: superAdmin, Disabled: disabled },
             { upsert: true, new: true, setDefaultsOnInsert: true }
             );
         
