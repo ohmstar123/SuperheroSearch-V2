@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase'
-import { onAuthStateChanged, signOut, sendEmailVerification } from 'firebase/auth'
+import { onAuthStateChanged, signOut, sendEmailVerification, updatePassword } from 'firebase/auth'
 
 const AuthDetails = () => {
     const [authUser, setAuthUser] = useState(null)
+    const [newPassword, setNewPassword] = useState('')
+    
 
     useEffect(() => {
 
@@ -18,6 +20,7 @@ const AuthDetails = () => {
 
         return () => {
             listen()
+            userSignout()
         }
     }, [])
 
@@ -33,6 +36,23 @@ const AuthDetails = () => {
         })
     }
 
+    const updatePasswordHandler = () => {
+        console.log(newPassword)
+        if (newPassword){
+            updatePassword(authUser, newPassword)
+            .then(() => {
+                alert('Password updated successfully')
+                setNewPassword('')
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+        }
+        else {
+            alert('Please enter a new password')
+        }
+    }
+
     const userSignout = () => {
         signOut(auth)
         .then(() => {
@@ -44,14 +64,15 @@ const AuthDetails = () => {
     }
 
     return (
-        // <div>
-        //     { authUser ? <><p>Signed In as ${authUser.email}</p> <button onClick={userSignout}>Sign Out</button></> : <p>Signed Out</p> }
-        // </div>
         <div>
             { authUser ? (authUser.emailVerified ? (
                 <>
-                    window.location.reload()
                     <p>Signed in as ${authUser.email}</p>
+                    <div>
+                        <label>New Password</label>
+                        <input type='password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)}></input>
+                        <button onClick={updatePasswordHandler}>Update Password</button>
+                    </div>
                     <button onClick={userSignout}>Sign Out</button>
                 </>
             ) : (<>

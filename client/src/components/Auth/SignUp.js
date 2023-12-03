@@ -1,28 +1,52 @@
 import React, {useState} from 'react'
 import { auth } from '../../firebase'
-import { createUserWithEmailAndPassword, sendEmailVerification} from 'firebase/auth'
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile} from 'firebase/auth'
 
 const SignUp = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [username, setUsername] = useState('')
     
-    const signUp = (e) => {
-        e.preventDefault()
-        createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            sendEmailVerification(auth.currentUser)
-            .then(() => {
+    const signUp = async (e) => {
+        // e.preventDefault()
+        // createUserWithEmailAndPassword(auth, email, password)
+        // .then((userCredential) => {
+        //     console.log(username)
+        //     updateProfile(userCredential.user, { displayName: username})
+        //     sendEmailVerification(auth.currentUser)
+        //     .then(() => {
+        //         console.log('Verification email sent')
+        //     })
+        //     .catch((error) => {
+        //         console.error(error)
+        //     })
+        //     console.log(userCredential)
+        // })
+        // .catch((error) => {
+        //     alert('Email already exists')
+        //     console.log(error)
+        // })
+
+        try{
+            e.preventDefault()
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            console.log(username)
+            await updateProfile(userCredential.user, { displayName: username})
+            try{
+                await sendEmailVerification(auth.currentUser)
                 console.log('Verification email sent')
-            })
-            .catch((error) => {
+            }
+            catch (error){
                 console.error(error)
-            })
+            }
             console.log(userCredential)
-        })
-        .catch((error) => {
+        }
+        catch (error){
             alert('Email already exists')
             console.log(error)
-        })
+        }
+        
+
 
 
     }
@@ -33,7 +57,7 @@ const SignUp = () => {
                 <h1>Create An Account</h1>
                 <input type='email' placeholder='Enter your email' value={email} onChange={(e) => setEmail(e.target.value)}></input>
                 <input type='password' placeholder='Enter your password' value={password} onChange={(e) => setPassword(e.target.value)}></input>
-                <input type='text' placeholder='Enter your username'></input>
+                <input type='text' placeholder='Enter your username' onChange={e => setUsername(e.target.value)}></input>
                 <button type='submit'>Sign Up</button>
             </form>
         </div>

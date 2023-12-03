@@ -1,10 +1,11 @@
 import React, {useState} from 'react'
 import { auth } from '../../firebase'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, getIdToken } from 'firebase/auth'
 
 const SignIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [jwtToken, setJwtToken] = useState(null)
     
     const signIn = (e) => {
         e.preventDefault()
@@ -15,9 +16,12 @@ const SignIn = () => {
         }
         
         signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            //console.log(userCredential)
-            //console.log(auth.currentUser)
+        .then(async (userCredential) => {
+            console.log(userCredential)
+            const token = await getIdToken(userCredential.user);
+                // Assuming your JWT token is stored in userCredential object
+                setJwtToken(token);
+                console.log(token)
         })
         .catch((error) => {
             console.log(error)
