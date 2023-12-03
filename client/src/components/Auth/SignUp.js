@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { auth } from '../../firebase'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, sendEmailVerification} from 'firebase/auth'
 
 const SignUp = () => {
     const [email, setEmail] = useState('')
@@ -10,6 +10,13 @@ const SignUp = () => {
         e.preventDefault()
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
+            sendEmailVerification(auth.currentUser)
+            .then(() => {
+                console.log('Verification email sent')
+            })
+            .catch((error) => {
+                console.error(error)
+            })
             console.log(userCredential)
         })
         .catch((error) => {

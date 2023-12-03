@@ -13,10 +13,11 @@ const SignIn = () => {
             alert('Please enter an email and password')
             return
         }
-
+        
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            console.log(userCredential)
+            //console.log(userCredential)
+            //console.log(auth.currentUser)
         })
         .catch((error) => {
             console.log(error)
