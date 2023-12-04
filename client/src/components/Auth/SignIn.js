@@ -6,6 +6,7 @@ const SignIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [jwtToken, setJwtToken] = useState(null)
+    const [message, setMessage] = useState('')
     
     const signIn = (e) => {
         e.preventDefault()
@@ -27,23 +28,37 @@ const SignIn = () => {
             // console.log(userCredential.user.email)
             // console.log(userCredential.user.emailVerified)
 
+            fetch(`/api/superheroes/getDisabledStatus/${userCredential.user.email}`)
+            .then((res) => res.json())
+            .then( async (data) => {
+                
+                if (data.Disabled === true){
+                    setMessage('Your account has been disabled')
+                    //alert('Your account has been disabled')
+                    return
+                }  
+                else{
+                    if (userCredential.user.displayName === "Administrator"){
+                        await fetch(`/api/superheroes/updateUser/${token}/${userCredential.user.displayName}/${userCredential.user.email}/${userCredential.user.emailVerified}/true/false`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                    }
+                    else{
+                        await fetch(`/api/superheroes/updateUser/${token}/${userCredential.user.displayName}/${userCredential.user.email}/${userCredential.user.emailVerified}/false/false`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                    }
+                }  
+            });
+
             
-            if (userCredential.user.displayName === "Administrator"){
-                await fetch(`/api/superheroes/updateUser/${token}/${userCredential.user.displayName}/${userCredential.user.email}/${userCredential.user.emailVerified}/true/false`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-            }
-            else{
-                await fetch(`/api/superheroes/updateUser/${token}/${userCredential.user.displayName}/${userCredential.user.email}/${userCredential.user.emailVerified}/false/false`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-            }
+            
             
             // Change the admin from false to true for the first user when in AWS, then change it back to false
             
@@ -63,6 +78,7 @@ const SignIn = () => {
                 <input type='email' placeholder='Enter your email' value={email} onChange={(e) => setEmail(e.target.value)}></input>
                 <input type='password' placeholder='Enter your password' value={password} onChange={(e) => setPassword(e.target.value)}></input>
                 <button type='submit'>Log In</button>
+                <p>{message}</p>
             </form>
         </div>
     )

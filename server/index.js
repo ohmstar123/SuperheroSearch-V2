@@ -603,6 +603,24 @@ infoRouter.route('/getAllEmails')
         }
     })
 
+infoRouter.route('/getDisabledStatus/:email')
+    .get (async (req, res) => {
+        const email = req.params.email;
+        try {
+            const user = await userInfo.findOne({ Email: email });
+
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            res.status(200).json({ Disabled: user.Disabled });
+        } 
+        catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    })
+
 infoRouter.route('/changeAdminStatusTrue/:email')
     // Change the admin status of a user
     .put (async (req, res) => {
