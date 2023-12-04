@@ -6,7 +6,6 @@ const SignIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [jwtToken, setJwtToken] = useState(null)
-    const [admin, setAdmin] = useState(false)
     
     const signIn = (e) => {
         e.preventDefault()
@@ -55,10 +54,6 @@ const SignIn = () => {
             
             alert('Incorrect email or password')
         })
-    }
-
-    const updateUserData = async () => {
-        console.log("Real Value: " + admin)
     }
 
     return (

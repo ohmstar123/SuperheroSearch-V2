@@ -590,6 +590,103 @@ infoRouter.route('/getAdminStatus/:email')
         }
     })
 
+infoRouter.route('/getAllEmails')
+    // Get all the emails
+    .get (async (req, res) => {
+        try {
+            const allEmails = await userInfo.find({}).select('Email -_id');
+            res.status(200).json(allEmails);
+        } 
+        catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    })
+
+infoRouter.route('/changeAdminStatusTrue/:email')
+    // Change the admin status of a user
+    .put (async (req, res) => {
+        const email = req.params.email;
+        try {
+            const user = await userInfo.findOne({ Email: email });
+
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            await userInfo.updateOne({ Email: email }, { Admin: true });
+
+            res.status(200).json({ message: 'Admin access granted' });
+        } 
+        catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    })
+
+infoRouter.route('/changeAdminStatusFalse/:email')
+    // Change the admin status of a user
+    .put (async (req, res) => {
+        const email = req.params.email;
+        try {
+            const user = await userInfo.findOne({ Email: email });
+
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            await userInfo.updateOne({ Email: email }, { Admin: false });
+
+            res.status(200).json({ message: 'Admin access removed' });
+        } 
+        catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    })
+
+infoRouter.route('/changeDisibliityTrue/:email')
+    // Change the admin status of a user
+    .put (async (req, res) => {
+        const email = req.params.email;
+        try {
+            const user = await userInfo.findOne({ Email: email });
+
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            await userInfo.updateOne({ Email: email }, { Disabled: true });
+
+            res.status(200).json({ message: 'User is now disabled' });
+        } 
+        catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    })
+
+infoRouter.route('/changeDisibliityFalse/:email')
+    // Change the admin status of a user
+    .put (async (req, res) => {
+        const email = req.params.email;
+        try {
+            const user = await userInfo.findOne({ Email: email });
+
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            await userInfo.updateOne({ Email: email }, { Disabled: false });
+
+            res.status(200).json({ message: 'User is no longer disabled' });
+        } 
+        catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    })
+
 infoRouter.route('/') // Chain all the routes to the base prefix (/api/superheroes)
     // Get info on all the superheroes
     .get(async (req, res) => {

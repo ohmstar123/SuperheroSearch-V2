@@ -14,6 +14,7 @@ const SignUp = () => {
             console.log(username)
             await updateProfile(userCredential.user, { displayName: username})
             try{
+                //TODO - check if the administrator username is already in use
                 await sendEmailVerification(auth.currentUser)
                 console.log('Verification email sent')
             }
