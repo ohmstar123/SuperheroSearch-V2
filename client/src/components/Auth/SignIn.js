@@ -6,6 +6,7 @@ const SignIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [jwtToken, setJwtToken] = useState(null)
+    const [admin, setAdmin] = useState(false)
     
     const signIn = (e) => {
         e.preventDefault()
@@ -20,18 +21,33 @@ const SignIn = () => {
             console.log(userCredential)
             const token = await getIdToken(userCredential.user)
             // Assuming your JWT token is stored in userCredential object
+
             setJwtToken(token)
-            console.log(token)
-            console.log(userCredential.user.displayName)
-            console.log(userCredential.user.email)
-            console.log(userCredential.user.emailVerified)
+            // console.log(token)
+            // console.log(userCredential.user.displayName)
+            // console.log(userCredential.user.email)
+            // console.log(userCredential.user.emailVerified)
+
             
-            await fetch(`/api/superheroes/updateUser/${token}/${userCredential.user.displayName}/${userCredential.user.email}/${userCredential.user.emailVerified}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
+            if (userCredential.user.displayName === "Administrator"){
+                await fetch(`/api/superheroes/updateUser/${token}/${userCredential.user.displayName}/${userCredential.user.email}/${userCredential.user.emailVerified}/true/false`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            }
+            else{
+                await fetch(`/api/superheroes/updateUser/${token}/${userCredential.user.displayName}/${userCredential.user.email}/${userCredential.user.emailVerified}/false/false`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            }
+            
+            // Change the admin from false to true for the first user when in AWS, then change it back to false
+            
 
         })
         .catch((error) => {
@@ -39,8 +55,10 @@ const SignIn = () => {
             
             alert('Incorrect email or password')
         })
+    }
 
-
+    const updateUserData = async () => {
+        console.log("Real Value: " + admin)
     }
 
     return (

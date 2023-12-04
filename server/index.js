@@ -402,7 +402,6 @@ const userInfoSchema = new mongoose.Schema({
     "Email": String,
     "Status": Boolean,
     "Admin": Boolean,
-    "SuperAdmin": Boolean,
     "Disabled": Boolean
 })
 const userInfo = mongoose.model('userInfo', userInfoSchema)
@@ -548,24 +547,42 @@ infoRouter.route('/getInfoAndPowers')
     }
 })
 
-infoRouter.route('/updateUser/:JWT/:username/:email/:status/:admin/:superAdmin/:disabled')
+infoRouter.route('/updateUser/:JWT/:username/:email/:status/:admin/:disabled')
+    // Update the user info
     .put (async (req, res) => {
         const JWT = req.params.JWT;
         const username = req.params.username;
         const email = req.params.email;
         const status = req.params.status === 'true';
         const admin = req.params.admin === 'true';
-        const superAdmin = req.params.superAdmin === 'true';
         const disabled = req.params.disabled === 'true';
 
         try {
             await userInfo.findOneAndUpdate(
             { Email: email },
-            { JWT, Username: username, Status: status, Admin: admin, SuperAdmin: superAdmin, Disabled: disabled },
+            { JWT, Username: username, Status: status, Admin: admin, Disabled: disabled },
             { upsert: true, new: true, setDefaultsOnInsert: true }
             );
         
             res.send('User info updated');
+        } 
+        catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    })
+
+infoRouter.route('/getAdminStatus/:email')
+    // Get the user's admin status
+    .get (async (req, res) => {
+        const email = req.params.email;
+        try {
+            const user = await userInfo.findOne({ Email: email }).select('Admin -_id');
+
+            if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+            }
+            res.status(200).json(user);
         } 
         catch (error) {
             console.error(error);
