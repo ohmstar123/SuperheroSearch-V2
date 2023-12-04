@@ -10,6 +10,12 @@ const SignUp = () => {
     const signUp = async (e) => {
         try{
             e.preventDefault()
+
+            if (!email || !password || !username) {
+                alert('Please fill in all the fields');
+                return;
+            }
+
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)
             console.log(username)
             await updateProfile(userCredential.user, { displayName: username})
