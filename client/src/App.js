@@ -4,6 +4,7 @@ import HomePage from "./components/HomePage/HomePage";
 import AdminPage from "./components/AdminPage/AdminPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
+// This is the main app component, it contains the home page and admin page
 function App() {
 
   return (
@@ -16,4 +17,5 @@ function App() {
   );
 }
 
+// exporting the app component
 export default App;

@@ -3,40 +3,42 @@ import { auth } from '../../firebase'
 import { signInWithEmailAndPassword, getIdToken } from 'firebase/auth'
 
 const SignIn = () => {
+    // setting up the use states
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [jwtToken, setJwtToken] = useState(null)
     const [message, setMessage] = useState('')
     
+    // function to handle the sign in
     const signIn = (e) => {
         e.preventDefault()
 
+        // if the email or password is empty, alert the user
         if (!email || !password) {
             alert('Please enter an email and password')
             return
         }
         
+        // sign in with the email and password
         signInWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
+            // Signed in and store the JWT token
             console.log(userCredential)
             const token = await getIdToken(userCredential.user)
-            // Assuming your JWT token is stored in userCredential object
-
             setJwtToken(token)
-            // console.log(token)
-            // console.log(userCredential.user.displayName)
-            // console.log(userCredential.user.email)
-            // console.log(userCredential.user.emailVerified)
 
+            // if the user is an admin, redirect them to the admin page
             fetch(`/api/superheroes/getDisabledStatus/${userCredential.user.email}`)
             .then((res) => res.json())
             .then( async (data) => {
                 
+                // if the user is disabled, alert them
                 if (data.Disabled === true){
                     setMessage('Your account has been disabled')
                     //alert('Your account has been disabled')
                     return
                 }  
+                // if the user is not disabled, check if they are an admin
                 else{
                     if (userCredential.user.displayName === "Administrator"){
                         await fetch(`/api/superheroes/updateUser/${token}/${userCredential.user.displayName}/${userCredential.user.email}/${userCredential.user.emailVerified}/true/false`, {
@@ -56,13 +58,6 @@ const SignIn = () => {
                     }
                 }  
             });
-
-            
-            
-            
-            // Change the admin from false to true for the first user when in AWS, then change it back to false
-            
-
         })
         .catch((error) => {
             console.log(error)
@@ -71,6 +66,7 @@ const SignIn = () => {
         })
     }
 
+    // jsx for the sign in page
     return (
         <div className='sign-in-container'>
             <form onSubmit={signIn}>
@@ -84,5 +80,6 @@ const SignIn = () => {
     )
 }
 
+// exporting the sign in page
 export default SignIn
 

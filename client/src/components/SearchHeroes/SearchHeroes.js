@@ -20,6 +20,7 @@ const SearchHeroes = () => {
         });
     }, []);
     
+    // Fuzzy search function to allow for soft searching
     const fuzzySearch = (query, target) => {
       const queryNoSpaces = query.replace(/\s/g, '')
       const targetNoSpaces = target.replace(/\s/g, '')
@@ -27,6 +28,7 @@ const SearchHeroes = () => {
       const queryLower = queryNoSpaces.toLowerCase()
       const targetLower = targetNoSpaces.toLowerCase()
 
+      // If the query is longer than the target, it can't be a match
       let mismatchCount = 0;
       for (let i = 0; i < queryLower.length; i++) {
         if (queryLower[i] !== targetLower[i]) {
@@ -40,6 +42,7 @@ const SearchHeroes = () => {
       return true
     }
 
+    // Function to handle the search
     const handleSearch = (resultIndex) => {
         // Gather all the data from the database
         const results = fetchedData;
@@ -64,12 +67,14 @@ const SearchHeroes = () => {
         setSearchResults(filteredResults); 
     };
 
+    // Function to handle the search on DuckDuckGo
     const handleDDGSearch = (name, publisher) => {
       const searchQuery = `${name} ${publisher}`;
       const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(searchQuery)}`
       window.open(searchUrl, '_blank')
     }
 
+    // jsx for the search page
     return (
         <div>
           <h2>Search Heroes</h2>
@@ -141,4 +146,5 @@ const SearchHeroes = () => {
 
 };
 
+// exporting the search page
 export default SearchHeroes;

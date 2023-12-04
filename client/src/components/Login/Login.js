@@ -2,20 +2,24 @@ import React, { useState } from 'react';
 import "./Login.css";
 
 const Login = () => {
+  // setting up the use states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
 
+  // function to handle the login
   const handleLogin = () => {
     // Simulate login logic - replace with actual authentication logic
     alert(`Login: Email - ${email}, Password - ${password}`);
   };
 
+  //  function to handle the signup
   const handleSignup = () => {
     // Simulate signup logic - replace with actual user registration logic
     alert(`Signup: Email - ${email}, Password - ${password}, Nickname - ${nickname}`);
   };
 
+  // jsx for the login page
   return (
     <div>
       <h2>Login</h2>
@@ -61,4 +65,5 @@ const Login = () => {
   );
 };
 
+// export the login page
 export default Login;

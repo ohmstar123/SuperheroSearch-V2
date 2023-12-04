@@ -6,6 +6,7 @@ import SignIn from '../Auth/SignIn'
 import SignUp from '../Auth/SignUp'
 import AuthDetails from '../AuthDetails'
 
+// This is the home page, it contains the login, sign up, and search heroes components
 const HomePage = () => {
     return(
         <div>
@@ -20,4 +21,5 @@ const HomePage = () => {
     )
 };
 
+// exporting the home page
 export default HomePage;

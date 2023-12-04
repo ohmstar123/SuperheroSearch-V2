@@ -3,18 +3,18 @@ import { auth } from '../firebase'
 import { onAuthStateChanged, signOut, sendEmailVerification, updatePassword } from 'firebase/auth'
 
 const AuthDetails = () => {
+    // setting up the use states
     const [authUser, setAuthUser] = useState(null)
     const [newPassword, setNewPassword] = useState('')
     const [admin, setAdmin] = useState(false)
     const [disabled, setDisabled] = useState(false)
     
-
+    // use effect hook to check if the user is signed in
     useEffect(() => {
-
         const listen = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setAuthUser(user)
-
+                // get the admin status of the user
                 fetch(`/api/superheroes/getAdminStatus/${user.email}`)
                 .then((res) => res.json())
                 .then((data) => {
@@ -22,6 +22,7 @@ const AuthDetails = () => {
                     console.log("VALUE OF ADMIN: " + data.Admin)    
                 });
 
+                // get the disabled status of the user
                 fetch(`/api/superheroes/getDisabledStatus/${user.email}`)
                 .then((res) => res.json())
                 .then((data) => {
@@ -34,9 +35,7 @@ const AuthDetails = () => {
             }
         })
 
-        
-
-
+        // return the listen function and sign out the user
         return () => {
             listen()
             userSignout()
@@ -44,7 +43,7 @@ const AuthDetails = () => {
     }, [])
 
     
-
+    // function to resend the verification email
     const resendVarification = () => {
         sendEmailVerification(authUser)
         .then(() => {
@@ -55,6 +54,7 @@ const AuthDetails = () => {
         })
     }
 
+    // function to update the password
     const updatePasswordHandler = () => {
         console.log(newPassword)
         if (newPassword){
@@ -72,6 +72,7 @@ const AuthDetails = () => {
         }
     }
 
+    // function to sign out the user
     const userSignout = () => {
         signOut(auth)
         .then(() => {
@@ -86,45 +87,8 @@ const AuthDetails = () => {
         window.location.href = '/admin'
     }
 
+    // jsx for the auth details
     return (
-        // <div>
-        //     { authUser ?
-        //     (authUser.emailVerified ? 
-        //         (admin === true ? 
-        //             (
-        //                 <>
-        //                     <p>Signed in as ${authUser.email} - <b>Administrator</b></p>
-        //                     <div>
-        //                         <label>New Password</label>
-        //                         <input type='password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)}></input>
-        //                         <button onClick={updatePasswordHandler}>Update Password</button>
-        //                         <button onClick={adminAccess}>See Admin Page</button>
-        //                     </div>
-        //                     <button onClick={userSignout}>Sign Out</button>
-        //                 </>
-        //             ) : 
-        //             (
-        //                 <>
-        //                     <p>Signed in as ${authUser.email}</p>
-        //                     <div>
-        //                         <label>New Password</label>
-        //                         <input type='password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)}></input>
-        //                         <button onClick={updatePasswordHandler}>Update Password</button>
-        //                     </div>
-        //                     <button onClick={userSignout}>Sign Out</button>
-        //                 </>
-        //             )
-        //         ) : 
-        //         (<>
-        //                 <p>Please verify your account with the link sent to you</p>
-        //                 <button onClick={resendVarification}>Resend Verification Email</button>
-        //             </>
-        //         )) : 
-        //         (<p>Signed Out</p>)}
-        // </div>
-
-
-
         <div>
             {authUser ? (
                 disabled === true ? (
@@ -169,4 +133,5 @@ const AuthDetails = () => {
     )
 }
 
+// export the auth details
 export default AuthDetails
